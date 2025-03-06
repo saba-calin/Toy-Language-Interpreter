@@ -17,7 +17,7 @@ public class ForkStatement implements IStatement {
 
     @Override
     public ProgramState execute(ProgramState programState) throws StatementException, KeyNotFoundException, ExpressionException {
-        return new ProgramState(this.statement, new MyStack<>(), programState.getSymbolTable().copy(), programState.getOutputList(), programState.getFileTable(), programState.getHeap(), programState.getLatchTable());
+        return new ProgramState(this.statement, new MyStack<>(), programState.getSymbolTable().copy(), programState.getOutputList(), programState.getFileTable(), programState.getHeap(), programState.getSemaphoreTable());
     }
 
     @Override

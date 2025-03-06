@@ -6,8 +6,8 @@ import exceptions.KeyNotFoundException;
 import exceptions.StatementException;
 import model.adts.dictionary.MyDictionary;
 import model.adts.heap.IHeap;
-import model.adts.latch.ILatchTable;
 import model.adts.list.MyList;
+import model.adts.semaphore.Semaphore;
 import model.adts.stack.MyStack;
 import model.statements.IStatement;
 import model.values.IValue;
@@ -22,11 +22,11 @@ public class ProgramState {
     private MyList<String> outputList;
     private MyDictionary<StringValue, BufferedReader> fileTable;
     private IHeap heap;
-    private ILatchTable latchTable;
-    private int id;
+    private Semaphore semaphore;
+    int id;
     private static int nextId = 0;
 
-    public ProgramState(IStatement initStatement, MyStack<IStatement> execStack, MyDictionary<String, IValue> symbolTable, MyList<String> outputList, MyDictionary<StringValue, BufferedReader> fileTable, IHeap heap, ILatchTable latchTable) {
+    public ProgramState(IStatement initStatement, MyStack<IStatement> execStack, MyDictionary<String, IValue> symbolTable, MyList<String> outputList, MyDictionary<StringValue, BufferedReader> fileTable, IHeap heap, Semaphore semaphore) {
         // typeCheck(initStatement);
 
         this.id = requestId();
@@ -35,7 +35,7 @@ public class ProgramState {
         this.outputList = outputList;
         this.fileTable = fileTable;
         this.heap = heap;
-        this.latchTable = latchTable;
+        this.semaphore = semaphore;
         this.initStatement = initStatement.deepCopy();
         this.execStack.push(initStatement);
     }
@@ -74,8 +74,8 @@ public class ProgramState {
         return this.heap;
     }
 
-    public ILatchTable getLatchTable() {
-        return this.latchTable;
+    public Semaphore getSemaphoreTable() {
+        return this.semaphore;
     }
 
     public boolean isNotCompleted() {
@@ -89,7 +89,7 @@ public class ProgramState {
 
     @Override
     public String toString() {
-        return "ID:" + this.id + "\n" + "EXECUTION_STACK: " + this.execStack.toString()+ "\n" + "SYMBOL_TABLE: " + this.symbolTable.toString() + "\n" + "OUTPUT_LIST: " + this.outputList.toString() + "\n" + "FILE_TABLE: " + this.fileTableToString() + "\n" + "HEAP: " + this.heap.toString() + "\n" + "LATCH_TABLE: " + this.latchTable.toString() + "\n";
+        return "ID:" + this.id + "\n" + "EXECUTION_STACK: " + this.execStack.toString()+ "\n" + "SYMBOL_TABLE: " + this.symbolTable.toString() + "\n" + "OUTPUT_LIST: " + this.outputList.toString() + "\n" + "FILE_TABLE: " + this.fileTableToString() + "\n" + "HEAP: " + this.heap.toString() + "\n";
     }
 
     private String fileTableToString() {
